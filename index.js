@@ -34,6 +34,7 @@ client.connect(err => {
     const serviceCollection = client.db("driCub").collection("services");
     const orderCollection = client.db("driCub").collection("orders");
     const adminCollection = client.db("driCub").collection("admin");
+    const reviewCollection = client.db("driCub").collection("reviews");
     console.log('db connected');
     // perform actions on the collection object
     //   client.close();
@@ -126,9 +127,9 @@ client.connect(err => {
     })
 
     app.post('/addAdmin', (req, res) => {
-        const newBook = req.body;
-        console.log(newBook);
-        adminCollection.insertOne(newBook)
+        const newAdmin = req.body;
+        console.log(newAdmin);
+        adminCollection.insertOne(newAdmin)
             .then(result => {
                 console.log(result.insertedCount);
                 res.send(result.insertedCount > 0)
@@ -140,6 +141,23 @@ client.connect(err => {
         adminCollection.find({ email: email })
             .toArray((err, admin) => {
                 res.send(admin.length > 0);
+            })
+    })
+
+    app.post('/addReview', (req, res) => {
+        const newReview = req.body;
+        console.log(newReview);
+        reviewCollection.insertOne(newReview)
+            .then(result => {
+                console.log(result.insertedCount);
+                res.send(result.insertedCount > 0)
+            })
+    })
+
+    app.get('/reviews', (req, res) => {
+        reviewCollection.find()
+            .toArray((err, items) => {
+                res.send(items)
             })
     })
 });
