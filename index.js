@@ -36,46 +36,7 @@ client.connect(err => {
     const adminCollection = client.db("driCub").collection("admin");
     const reviewCollection = client.db("driCub").collection("reviews");
     console.log('db connected');
-    // perform actions on the collection object
-    //   client.close();
-
-
-    // app.post('/addAService', (req, res) => {
-    //     const file = req.files.file;
-    //     const name = req.body.name;
-    //     const price = req.body.price;
-    //     // const filePath = `${__dirname}/doctors/${file.name}`;
-    //     // const newImg = file.data;
-    //     // const encImg = newImg.toString('base64');
-
-    //     console.log(file, name, price);
-    //     // file.mv(filePath, err => {
-    //     //     if (err) {
-    //     //         console.log(err);
-    //     //         return res.status(500).send({ msg: 'Failed to upload Image' });
-    //     //     }
-    //     // var newImg = fs.readFileSync(filePath);
-    //     const newImg = req.files.file.data;
-    //     const encImg = newImg.toString('base64');
-
-
-    //     var image = {
-    //         contentType: file.mimetype,
-    //         size: file.size,
-    //         img: Buffer.from(encImg, 'base64')
-    //     };
-
-    //     serviceCollection.insertOne({ name, price, image })
-    //         .then(result => {
-    //             // fs.remove(filePath, error => {
-    //             //     if(error){console.log(error)}
-    //             //     res.send(result.insertedCount > 0);
-    //             // })
-    //             res.send(result.insertedCount > 0);
-
-    //         })
-
-    //     })
+    
 
 
     app.post('/addAService', (req, res) => {
@@ -160,5 +121,22 @@ client.connect(err => {
                 res.send(items)
             })
     })
+
+    app.get('/manageServices', (req, res) => {
+        serviceCollection.find()
+            .toArray((err, items) => {
+                res.send(items)
+            })
+    })
+
+    app.delete('/deleteEvent/:id', (req, res) => {
+        serviceCollection.deleteOne({ _id: ObjectID(req.params.id) })
+          .then(result => {
+            res.send({ count: result.deletedCount > 0 });
+            // res.redirect('/')
+          })
+    
+        
+      })
 });
 
