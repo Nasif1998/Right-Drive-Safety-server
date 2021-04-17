@@ -12,7 +12,7 @@ const app = express()
 
 // app.use(express.static('services'));
 // app.use(fileUpload());
-const port = process.env.PORT || 9002;
+const port = process.env.PORT || 9003;
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -138,5 +138,33 @@ client.connect(err => {
     
         
       })
+
+      app.delete('/deleteOrder/:id', (req, res) => {
+        orderCollection.deleteOne({ _id: ObjectID(req.params.id) })
+          .then(result => {
+            res.send({ count: result.deletedCount > 0 });
+            // res.redirect('/')
+          })
+    
+        
+      })
+
+      app.get('/orderDetails/:id', (req,res) => {
+        orderCollection.find({_id: ObjectID(req.params.id)})
+        .toArray( (err, documents) => {
+            res.send(documents[0]);
+        })
+    })
+
+    app.patch('/update/:id', (req, res) => {
+        productCollection.updateOne({_id: ObjectID(req.params.id)},
+        {
+            $set: {status: req.body.status}
+        })
+        .then(result => {
+            // console.log(result);
+            res.send(result.modifiedCount > 0);
+        })
+    })
 });
 
