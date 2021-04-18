@@ -157,7 +157,7 @@ client.connect(err => {
     })
 
     app.patch('/update/:id', (req, res) => {
-        productCollection.updateOne({_id: ObjectID(req.params.id)},
+        orderCollection.updateOne({_id: ObjectID(req.params.id)},
         {
             $set: {status: req.body.status}
         })
